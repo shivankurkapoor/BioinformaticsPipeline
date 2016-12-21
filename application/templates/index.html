@@ -18,52 +18,7 @@
             });
         }
     </script>
-    <script>
-        var developerKey = 'AIzaSyBYQCJZM4Pzm5uZsa_JRhrqzQxnDB2SHU4';
-        var appId = '622015755620';
-        var oauthToken;
-        function loadPicker() {
-            gapi.load('picker', {'callback': onPickerApiLoad});
-        }
-        function onPickerApiLoad() {
-            pickerApiLoaded = true;
-            createPicker();
-        }
-        function handleAuthResult(authResult) {
-            if (authResult && !authResult.error) {
-                oauthToken = authResult.access_token;
-                createPicker();
-            }
-        }
 
-        // A simple callback implementation.
-        function pickerCallback(data) {
-            if (data.action == google.picker.Action.PICKED) {
-                var fileId = data.docs[0].id;
-                alert('The user selected: ' + fileId);
-            }
-        }
-
-        // Create and render a Picker object for searching images.
-        function createPicker() {
-            if (pickerApiLoaded && oauthToken) {
-                var view = new google.picker.View(google.picker.ViewId.DOCS);
-                var picker = new google.picker.PickerBuilder()
-                        .enableFeature(google.picker.Feature.NAV_HIDDEN)
-                        .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
-                        .setAppId(appId)
-                        .setOAuthToken(oauthToken)
-                        .addView(view)
-                        .addView(new google.picker.DocsUploadView())
-                        .setDeveloperKey(developerKey)
-                        .setCallback(pickerCallback)
-                        .build();
-                picker.setVisible(true);
-            }
-        }
-
-
-    </script>
 </head>
 <body>
 This is the homepage for Bioinformatics Pipeline
@@ -85,14 +40,16 @@ This is the homepage for Bioinformatics Pipeline
             var authcode = {'authcode': authResult['code']}
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:5000/authenticate',
+                url: 'http://localhost:5000/connect',
                 contentType: 'application/octet-stream; charset=utf-8',
                 success: function (result) {
                     // Handle or verify the server response.
-                   if(result['status'] == 'ok'){
-                        oauthToken = result['access_token'];
-                        createPicker();
-                   }
+                    if (result['status'] == 'ok') {
+                        window.location.href = "/showform";
+                    }
+                    else{
+                        window.location.href = "/error";
+                    }
                 },
                 processData: false,
                 data: JSON.stringify(authcode),
@@ -103,18 +60,6 @@ This is the homepage for Bioinformatics Pipeline
         }
     }
 </script>
-<a href="#" onclick="signOut();">Sign out</a>
-<script>
-    function signOut() {
-        var auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
-            console.log('User signed out.');
-        });
-    }
-</script>
-<div id="result"></div>
 
-<!-- The Google API Loader script. -->
-<script type="text/javascript" src="https://apis.google.com/js/api.js?onload=loadPicker"></script>
 </body>
 </html>

@@ -2,9 +2,9 @@
 This is the main file for the backend server
 '''
 
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, session, redirect
 from server.errorhandler import *
-from server.authentication import *
+from server.connect import *
 from common.globalconst import *
 from common.globalfunct import *
 
@@ -15,19 +15,40 @@ application = Flask(__name__)
 @application.route('/')
 def app_demo():
   """
-    This is the simple demo
+    This is the homepage with sign-in option
     :return:
     """
   return render_template('index.html')
 
-@application.route('/authenticate', methods=['POST'])
-def app_authenticate():
+@application.route('/showform',)
+def app_show_form():
+    if 'userId' in session and session['userId']:
+        oauthtoken = get_oauth_token(session['userId'])
+        return render_template('form.html', oauthtoken = oauthtoken)
+    else:
+        return render_template('error.html', error='Could not authenticate')
+
+
+@application.route('/connect', methods=['POST'])
+def app_connect():
     '''
     This API authenticates the user
     :return:
     '''
     auth_fields = json_decode(request.data)
-    return authenticate_proc(auth_fields, request.remote_addr)
+    return_data, user_id = connect_proc(auth_fields, request.remote_addr)
+    session['userId'] = user_id
+    return return_data
+
+@application.route('/signout')
+def signout():
+    session.pop('userId',None)
+    return redirect('/')
+
+
+@application.route('/error')
+def error():
+    return render_template('error.html', error='Could not authenticate')
 
 
 @application.errorhandler(404)

@@ -225,11 +225,11 @@ def get_credentials(authorization_code, state=None):
         user_id = user_info.get('id')
         if credentials.refresh_token is not None:
             store_credentials(user_id, credentials, user_info)
-            return credentials, INT_OK
+            return user_id, INT_OK
         else:
             credentials = get_stored_credentials(user_id)
             if credentials and credentials.refresh_token is not None:
-                return credentials, INT_OK
+                return user_id,INT_OK
     except CodeExchangeException, error:
         logging.error('An error occurred during code exchange.')
         # Drive apps should try to retrieve the user and credentials for the current
@@ -244,13 +244,24 @@ def get_credentials(authorization_code, state=None):
     raise NoRefreshTokenException(authorization_url)
 
 
-def authenticate_proc(fields=None, client_ip=STR_UNDEFINED):
-    _authenticate_proc_parsing_fields(fields)
-    credentials, auth_status_code = get_credentials(fields['authcode'])
-    credentials = json_decode(credentials.to_json())
-    return respond_json(auth_status_code, **credentials)
+def connect_proc(fields=None, client_ip=STR_UNDEFINED):
+    _connect_proc_parsing_fields(fields)
+    user_id, auth_status_code = get_credentials(fields['authcode'])
+    return respond_json(auth_status_code), user_id
 
-def _authenticate_proc_parsing_fields(fields):
+
+def get_oauth_token(user_id):
+    user = engine.query(User).filter(userId=user_id).first()
+    if user:
+        user_dict = user.__dict__
+        if user_dict['credentials']:
+            credentials = json.loads(user_dict['credentials'])
+            access_token = credentials['access_token']
+            return access_token
+    return None
+
+
+def _connect_proc_parsing_fields(fields):
     try:
         assert 'authcode' in fields
     except AssertionError:

@@ -30,7 +30,10 @@ RENEW_TOKEN_URL = 'accounts.google.com'
 RENEW_TOKEN_PATH = '/o/oauth2/token'
 RENEW_TOKEN_PARAMS = 'client_id={client_id}&client_secret={client_secret}&refresh_token={refresh_token}&grant_type={grant_type}'
 
-
+'''
+GOOGLE DRIVE FILE DOWNLOAD
+'''
+DOWNLOAD_FILE_URL = 'googleapis.com/drive/v2/files/{fileId}?alt=media'
 
 '''
 Error Codes for various purpose

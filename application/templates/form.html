@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bioinformatics Pipeline</title>
+</head>
+<link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+<script src="../static/js/jquery-2.2.3.js"></script>
+<script src="../static/js/picker.js"></script>
+<script src="../static/js/vars.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+<script>
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+            window.location.href = "/signout";
+        });
+    }
+</script>
+<script>
+    function start() {
+        gapi.load('auth2', function () {
+            auth2 = gapi.auth2.init({
+                client_id: '622015755620-i2pb08g49b59gavbdjledqra79u17as7.apps.googleusercontent.com',
+                scope: 'https://www.googleapis.com/auth/drive.file email profile',
+                prompt: 'consent',
+                immediate: 'false'
+            });
+        });
+    }
+</script>
+<script>
+
+    oauthToken = '{{ oauthtoken }}';
+
+    function loadPicker() {
+        gapi.load('picker', {'callback': onPickerApiLoad});
+    }
+    function onPickerApiLoad() {
+        pickerApiLoaded = true;
+        createPicker();
+    }
+
+    function handleAuthResult(authResult) {
+        if (authResult && !authResult.error) {
+            oauthToken = authResult.access_token;
+
+        }
+    }
+    // A simple callback implementation.
+    function pickerCallback(data) {
+        if (data.action == google.picker.Action.PICKED) {
+            var fileId = data.docs[0].id;
+            alert('The user selected: ' + fileId);
+        }
+    }
+
+</script>
+<body>
+<form class="form-horizontal">
+    <fieldset>
+
+        <!-- Form Name -->
+        <legend>Bioinformatics Pipeline</legend>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="fps">Forward Primer Sequence</label>
+            <div class="col-md-4">
+                <input id="fps" name="fps" type="text" placeholder="placeholder"
+                       class="form-control input-md">
+                <span class="help-block">help</span>
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="bps">Backward Primer Sequence</label>
+            <div class="col-md-4">
+                <input id="bps" name="bps" type="text" placeholder="placeholder"
+                       class="form-control input-md">
+                <span class="help-block">help</span>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="seqlen">Sequence Length for Collapsing</label>
+            <div class="col-md-4">
+                <input id="seqlen" name="seqlen" type="number" placeholder="placeholder"
+                       class="form-control input-md">
+                <span class="help-block">help</span>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="percent">Percentage</label>
+            <div class="col-md-4">
+                <input id="percent" name="percent" type="number" step="0.01" placeholder="placeholder"
+                       class="form-control input-md">
+                <span class="help-block">Remove sequence with copies less than x% of the copies of maximum occupying sequence</span>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="basecount">Base Count</label>
+            <div class="col-md-4">
+                <input id="basecount" name="basecount" type="number" placeholder="placeholder"
+                       class="form-control input-md">
+                <span class="help-block">Remove sequences which have at least one base less than the given score</span>
+            </div>
+        </div>
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="forward">Forward</label>
+            <div class="col-md-4">
+                <button id="forward" name="forward" class="btn btn-primary" , onclick=loadPicker()>Google Drive</button>
+            </div>
+        </div>
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="backward">Backward</label>
+            <div class="col-md-4">
+                <button id="backward" name="backward" class="btn btn-primary" , onclick=loadPicker()>Google Drive
+                </button>
+            </div>
+        </div>
+
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="submit"></label>
+            <div class="col-md-4">
+                <button id="submit" name="backward" class="btn btn-primary"  type="submit">Submit
+                </button>
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+<div id="result"></div>
+<a href="#" onclick="signOut();">Sign out</a>
+<script src="https://apis.google.com/js/client:platform.js?onload=loadPicker" async defer></script>
+
+</body>
+</html>
