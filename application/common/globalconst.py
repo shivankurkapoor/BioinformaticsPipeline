@@ -7,7 +7,7 @@ STR_UNDEFINED = 'Undefined'
 '''
 Below fields are related to Google Drive API
 '''
-CLIENTSECRET_LOCATION = '/Users/shivankurkapoor/PycharmProjects/BioinformaticsPipeline/application/auth/client_secret.json'
+CLIENTSECRET_LOCATION = 'C:\\Users\\shivankurkapoor\\GitHub\\BioinformaticsPipeline\\application\\auth\client_secret.json'
 REDIRECT_URI = 'postmessage'
 SCOPES = [
     'https://www.googleapis.com/auth/drive.file'
@@ -34,6 +34,8 @@ RENEW_TOKEN_PARAMS = 'client_id={client_id}&client_secret={client_secret}&refres
 GOOGLE DRIVE FILE DOWNLOAD
 '''
 DOWNLOAD_FILE_URL = 'googleapis.com/drive/v2/files/{fileId}?alt=media'
+DOWNLOAD_FILE_PATH = 'C:\\Users\\shivankurkapoor\\GitHub\\BioinformaticsPipeline\\application\\dir\\{user_id}'
+MIME_TYPE = 'application/octet-stream'
 
 '''
 Error Codes for various purpose
@@ -54,3 +56,7 @@ INT_FOUND = 3001
 INT_LOGGEDOUT = 1009
 INT_OK = 0
 INT_CREATED = 2001
+INT_FAILURE_DOWNLOAD = -5001
+INT_FAILURE_UPLOAD = -5002
+INT_DOWNLOADED = 5001
+INT_UPLOADED = 5002
