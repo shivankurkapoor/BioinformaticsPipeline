@@ -26,7 +26,7 @@ class Request(Model):
     collapse_length = Field(data_type=NUMBER)
 
     def __init__(self, collapse_length, userid='', forward_file_parent_id='', forward_file_id='', backward_file_id='',
-                 backward_file_parent_id='',forward_primer_seq='', backward_primer_seq='', percentage=0, basecount=0):
+                 backward_file_parent_id='', forward_primer_seq='', backward_primer_seq='', percentage=0, basecount=0):
         super(Request, self).__init__()
         self.userId = userid
         self.forward_file_id = forward_file_id
@@ -56,10 +56,10 @@ class Request(Model):
     def set_isuploaded(self, isuploaded=False):
         setattr(self, 'isuploaded', isuploaded)
 
-    def set_processed_file_parent_id(self,id):
-        setattr(self,'processed_file_parent_id',id)
+    def set_processed_file_parent_id(self, id):
+        setattr(self, 'processed_file_parent_id', id)
 
     user_attr = ['userId', 'forward_file_id', 'backward_file_id',
-                 'forward_parent_id','backward_parent_id','time_create', 'time_processed', 'isprocessed',
-                 'processed_file', 'processed_file_id','isuploaded','forward_primer_seq',
-                 'backward_primer_seq','percentage','basecount','collapse_length']
+                 'forward_parent_id', 'backward_parent_id', 'time_create', 'time_processed', 'isprocessed',
+                 'processed_file', 'processed_file_id', 'isuploaded', 'forward_primer_seq',
+                 'backward_primer_seq', 'percentage', 'basecount', 'collapse_length']

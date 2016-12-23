@@ -4,7 +4,6 @@ Created on : 12/21/2016
 This module contains functions
 '''
 
-
 import logging
 import httplib2
 import io
@@ -26,21 +25,28 @@ from server.httpcomm.interface import *
 from apiclient import discovery
 
 
-
 def download_file(user_id, drive_service, file_id, filename):
+    '''
+
+    :param user_id:
+    :param drive_service:
+    :param file_id:
+    :param filename:
+    :return: status code
+    '''
     try:
         assert user_id
         assert drive_service
         assert file_id
         assert filename
     except AssertionError as e:
-        print 'One or more required parameters are missing ',e
+        print 'One or more required parameters are missing ', e
         return INT_ERROR_FORMAT
 
     try:
         request = drive_service.files().get_media(fileId=file_id)
         path = DOWNLOAD_FILE_PATH.format(user_id=user_id)
-        fh = io.FileIO(path +'\\' +filename, 'wb')
+        fh = io.FileIO(path + '\\' + filename, 'wb')
         downloader = http.MediaIoBaseDownload(fh, request)
         done = False
         print 'Downloading file {file_id} for user {user_id}'.format(file_id=file_id, user_id=user_id)
@@ -48,44 +54,42 @@ def download_file(user_id, drive_service, file_id, filename):
             status, done = downloader.next_chunk()
             print "Download %d%%." % int(status.progress() * 100)
     except Exception as e:
-        print 'Error in downloading file ',e
+        print 'Error in downloading file ', e
         return INT_FAILURE_DOWNLOAD
     return INT_DOWNLOADED
 
 
 def upload_file(service, title, description, parent_id, mime_type, filename):
-  """Insert new file.
+    """Insert new file.
 
-  Args:
-    service: Drive API service instance.
-    title: Title of the file to insert, including the extension.
-    description: Description of the file to insert.
-    parent_id: Parent folder's ID.
-    mime_type: MIME type of the file to insert.
-    filename: Filename of the file to insert.
-  Returns:
-    Inserted file metadata if successful, None otherwise.
-  """
-  media_body = http.MediaFileUpload(filename, mimetype=mime_type, resumable=True)
-  body = {
-    'title': title,
-    'description': description,
-    'mimeType': mime_type
-  }
-  # Set the parent folder.
-  if parent_id:
-    body['parents'] = [{'id': parent_id}]
+    Args:
+      service: Drive API service instance.
+      title: Title of the file to insert, including the extension.
+      description: Description of the file to insert.
+      parent_id: Parent folder's ID.
+      mime_type: MIME type of the file to insert.
+      filename: Filename of the file to insert.
+    Returns:
+      Inserted file metadata if successful, None otherwise.
+    """
+    media_body = http.MediaFileUpload(filename, mimetype=mime_type, resumable=True)
+    body = {
+        'title': title,
+        'description': description,
+        'mimeType': mime_type
+    }
+    # Set the parent folder.
+    if parent_id:
+        body['parents'] = [{'id': parent_id}]
 
-  try:
-    file = service.files().insert(
-        body=body,
-        media_body=media_body).execute()
+    try:
+        file = service.files().insert(
+            body=body,
+            media_body=media_body).execute()
 
-    # Uncomment the following line to print the File ID
-    print 'File ID: %s' % file['id']
-
-    return file['id']
-  except errors.HttpError, error:
-    print 'An error occured: %s' % error
-    return None
-
+        # Uncomment the following line to print the File ID
+        print 'File ID: %s' % file['id']
+        return INT_UPLOADED,file['id']
+    except errors.HttpError, error:
+        print 'An error occured: %s' % error
+        return INT_FAILURE_UPLOAD,None
