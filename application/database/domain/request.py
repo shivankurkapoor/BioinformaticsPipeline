@@ -7,7 +7,8 @@ from types import BooleanType
 
 
 class Request(Model):
-    userId = Field(data_type=STRING, hash_key=True)
+    requestId = Field(data_type=STRING, hash_key=True)
+    userId = Field(data_type=STRING, range_key=True)
     forward_file_id = Field(data_type=STRING)
     backward_file_id = Field(data_type=STRING)
     forward_file_parent_id = Field(data_type=STRING)
@@ -25,9 +26,10 @@ class Request(Model):
     basecount = Field(data_type=NUMBER)
     collapse_length = Field(data_type=NUMBER)
 
-    def __init__(self, collapse_length, userid='', forward_file_parent_id='', forward_file_id='', backward_file_id='',
+    def __init__(self, collapse_length, requestId = '', userid='', forward_file_parent_id='', forward_file_id='', backward_file_id='',
                  backward_file_parent_id='', forward_primer_seq='', backward_primer_seq='', percentage=0, basecount=0):
         super(Request, self).__init__()
+        self.requestId = requestId
         self.userId = userid
         self.forward_file_id = forward_file_id
         self.backward_file_id = backward_file_id
@@ -59,7 +61,7 @@ class Request(Model):
     def set_processed_file_parent_id(self, id):
         setattr(self, 'processed_file_parent_id', id)
 
-    user_attr = ['userId', 'forward_file_id', 'backward_file_id',
+    user_attr = ['userId','requestId', 'forward_file_id', 'backward_file_id',
                  'forward_parent_id', 'backward_parent_id', 'time_create', 'time_processed', 'isprocessed',
                  'processed_file', 'processed_file_id', 'isuploaded', 'forward_primer_seq',
                  'backward_primer_seq', 'percentage', 'basecount', 'collapse_length']

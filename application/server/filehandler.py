@@ -7,8 +7,6 @@ This module contains functions
 import logging
 import httplib2
 import io
-from dateutil import parser
-from datetime import datetime, timedelta
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from oauth2client.client import Credentials
@@ -19,8 +17,6 @@ from common.globalconst import *
 from common.globalfunct import *
 from server.errorhandler import *
 from server.server_common import *
-from database import *
-from database.domain.user import User
 from server.httpcomm.interface import *
 from apiclient import discovery
 
@@ -89,7 +85,7 @@ def upload_file(service, title, description, parent_id, mime_type, filename):
 
         # Uncomment the following line to print the File ID
         print 'File ID: %s' % file['id']
-        return INT_UPLOADED,file['id']
     except errors.HttpError, error:
         print 'An error occured: %s' % error
         return INT_FAILURE_UPLOAD,None
+    return INT_UPLOADED, file['id']
