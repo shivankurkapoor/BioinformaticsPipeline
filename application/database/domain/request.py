@@ -13,6 +13,8 @@ class Request(Model):
     backward_file_id = Field(data_type=STRING)
     forward_file_parent_id = Field(data_type=STRING)
     backward_file_parent_id = Field(data_type=STRING)
+    is_forward_file_downloaded = Field(data_type=BooleanType)
+    is_backward_file_downloaded = Field(data_type=BooleanType)
     time_create = Field(data_type=datetime)
     time_processed = Field(data_type=datetime)
     isprocessed = Field(data_type=BooleanType)
@@ -42,6 +44,9 @@ class Request(Model):
         self.forward_primer_seq = forward_primer_seq
         self.basecount = basecount
         self.collapse_length = collapse_length
+        self.is_backward_file_downloaded = False
+        self.is_forward_file_downloaded = False
+
 
     def set_processed_file(self, path):
         setattr(self, 'processed_file', path)
@@ -61,7 +66,15 @@ class Request(Model):
     def set_processed_file_parent_id(self, id):
         setattr(self, 'processed_file_parent_id', id)
 
+    def set_is_backward_file_downloaded(self,is_backward_file_downloaded=False):
+        setattr(self, 'is_backward_file_downloaded',is_backward_file_downloaded)
+
+    def set_is_forward_file_downloaded(self,is_forward_file_downloaded=False):
+        setattr(self, 'is_forward_file_downloaded',is_forward_file_downloaded)
+
     user_attr = ['userId','requestId', 'forward_file_id', 'backward_file_id',
                  'forward_parent_id', 'backward_parent_id', 'time_create', 'time_processed', 'isprocessed',
                  'processed_file', 'processed_file_id', 'isuploaded', 'forward_primer_seq',
-                 'backward_primer_seq', 'percentage', 'basecount', 'collapse_length']
+                 'backward_primer_seq', 'percentage', 'basecount', 'collapse_length','is_backward_file_downloaded',
+                 'is_forward_file_downloaded']
+

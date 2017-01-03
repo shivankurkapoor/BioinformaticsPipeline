@@ -7,6 +7,8 @@ This module contains functions
 import logging
 import httplib2
 import io
+import os
+import errno
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from oauth2client.client import Credentials
@@ -42,6 +44,11 @@ def download_file(user_id, drive_service, file_id, filename):
     try:
         request = drive_service.files().get_media(fileId=file_id)
         path = DOWNLOAD_FILE_PATH.format(user_id=user_id)
+        try:
+            os.makedirs(path)
+        except OSError as exception:
+            if exception.errno != errno.EEXIST:
+                raise
         fh = io.FileIO(path + '\\' + filename, 'wb')
         downloader = http.MediaIoBaseDownload(fh, request)
         done = False

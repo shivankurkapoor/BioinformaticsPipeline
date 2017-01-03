@@ -7,7 +7,7 @@ STR_UNDEFINED = 'Undefined'
 '''
 Below fields are related to Google Drive API
 '''
-CLIENTSECRET_LOCATION = 'C:\\Users\\shivankurkapoor\\GitHub\\BioinformaticsPipeline\\application\\auth\client_secret.json'
+CLIENTSECRET_LOCATION = '/Users/shivankurkapoor/PycharmProjects/BioinformaticsPipeline/application/auth/client_secret.json'
 REDIRECT_URI = 'postmessage'
 SCOPES = [
     'https://www.googleapis.com/auth/drive.file'
@@ -31,11 +31,15 @@ RENEW_TOKEN_PATH = '/o/oauth2/token'
 RENEW_TOKEN_PARAMS = 'client_id={client_id}&client_secret={client_secret}&refresh_token={refresh_token}&grant_type={grant_type}'
 
 '''
-GOOGLE DRIVE FILE DOWNLOAD
+GOOGLE DRIVE FILE HANDLING
 '''
 DOWNLOAD_FILE_URL = 'googleapis.com/drive/v2/files/{fileId}?alt=media'
-DOWNLOAD_FILE_PATH = 'C:\\Users\\shivankurkapoor\\GitHub\\BioinformaticsPipeline\\application\\dir\\{user_id}'
+DOWNLOAD_FILE_PATH = '/Users/shivankurkapoor/PycharmProjects/BioinformaticsPipeline/dir//{user_id}'
 MIME_TYPE = 'application/octet-stream'
+FORWARD_FILE = 'forwardfile_{request_id}.fasta'
+BACKWARD_FILE = 'backwardfile_{request_id}.fasta'
+RESULT_FILE = 'resultfile_{request_id}.fastq'
+DESCRIPTION = ''
 
 '''
 Error Codes for various purpose
